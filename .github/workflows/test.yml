@@ -1,5 +1,4 @@
-# .github/workflows/test.yml
-name: Mocha Tests
+name: vendor-service
 
 on:
   push:
@@ -9,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Run Mocha Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Run Mocha tests
-        run: npx mocha
+      - name: Run Mocha tests for Vendors
+        run: npm run test:vendors
         env:
           NODE_ENV: test
           MONGO_URI: ${{ secrets.MONGO_URI }}

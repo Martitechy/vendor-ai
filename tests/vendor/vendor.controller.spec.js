@@ -2,8 +2,8 @@
 import { expect } from "chai";
 import sinon from "sinon";
 import { faker } from "@faker-js/faker";
-import VendorRepository from "../../src/app/modules/vendor/repository/vendor.repository.js";
-import VendorService from "../../src/app/modules/vendor/services/vendor.services.js";
+import VendorRepository from "../../src/app/modules/repository/vendor.repository.js";
+import VendorService from "../../src/app/modules/services/vendor.services.js";
 
 describe("VendorService", () => {
   afterEach(() => sinon.restore());
