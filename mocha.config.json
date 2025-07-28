@@ -1,0 +1,8 @@
+{
+  "require": ["Vendors/tests/setup.js"],
+  "recursive": true,
+  "timeout": 20000,
+  "reporter": "spec",
+  "extension": ["js"],
+  "spec": "Vendors/tests/**/*.spec.js"
+}
