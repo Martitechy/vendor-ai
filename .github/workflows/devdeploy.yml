@@ -15,21 +15,24 @@ jobs:
     strategy:
       matrix:
         node-version: ["18.x"]
-    #Initialize Node.js
+
     steps:
+      # Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install Node.js${{ matrix.node-version }}
+      # Set up Node.js
+      - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      # Install project dependencies, test and build
+
+      # Install root dependencies (for monorepo)
       - name: Install dependencies
         run: npm install
-        # - name: Run build
-        # - run: npm run build
+        working-directory: ./Vendors
 
+      # Run tests for vendor service
       - name: Run Mocha tests for Vendors
         run: npm run test:vendors
         env:
@@ -37,3 +40,5 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: 3000
+
+  # Add Deployment Here (Optional for prod/staging pipelines)
