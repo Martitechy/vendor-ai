@@ -40,5 +40,41 @@ jobs:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           PORT: 3000
+      # - name: Run build
+      #   run: npm run build
+  deploy:
+    name: CD Pipeline
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ["18.x"]
+        appname: ["VendorService"]
+        application-deploy-name: ["VendorServiceDev"]
+        deploy-group: ["VendorService"]
+        s3-bucket: ["broadcaadcode"]
+        s3-filename: ["VendorService-vendorcode-${{ github.sha }}"]
+    needs: buildAndTest
+    steps:
+      # Checkout the repo
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Node.js
+      - name: Install Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Install root dependencies (for monorepo)
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./Vendors
+
+      # Run build for vendor service
+      - name: Run build
+        run: npm run build
+        working-directory: ./Vendors
+      # - name: Upload to S3
+      #   run: aws s3 cp ./Vendors/build s3://${{ matrix.s3-bucket }}/${{ matrix.s3-filename }} --recursive
 
   # Add Deployment Here (Optional for prod/staging pipelines)
