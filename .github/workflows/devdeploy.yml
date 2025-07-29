@@ -30,7 +30,7 @@ jobs:
       # Install root dependencies (for monorepo)
       - name: Install dependencies
         run: npm install
-        working-directory: ./Vendors
+        working-directory: Vendors
 
       # Run tests for vendor service
       - name: Run Mocha tests for Vendors
