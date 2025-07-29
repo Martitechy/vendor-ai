@@ -7,14 +7,13 @@ on:
   # Uncomment the following lines to enable pull request testing
   # pull_request:
   #   branches: [main]
-
 jobs:
   buildAndTest:
     name: CI Pipeline
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["12.x"]
+        node-version: ["18.x"]
 
     steps:
       # Checkout the repo
@@ -32,16 +31,6 @@ jobs:
         run: npm install
         # working-directory: ./Vendors
 
-      # Run tests for vendor service
-      # - name: Run Mocha tests for Vendors
-      #   run: npm run test:vendors
-      #   env:
-      #     NODE_ENV: test
-      #     MONGO_URI: ${{ secrets.MONGO_URI }}
-      #     JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      #     PORT: 3000
-      # - name: Run build
-      #   run: npm run build
   deploy:
     name: CD Pipeline
     runs-on: ubuntu-latest
