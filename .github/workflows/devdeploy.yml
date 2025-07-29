@@ -34,29 +34,26 @@ jobs:
   deploy:
     name: CD Pipeline
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: ["18.x"]
-        appname: ["VendorService"]
-        application-deploy-name: ["VendorServiceDev"]
-        deploy-group: ["VendorService"]
-        s3-bucket: ["martinezaicode"]
-        s3-filename: ["VendorService-vendorcode-${{ github.sha }}"]
     needs: buildAndTest
     steps:
-      # Checkout the repo
-      # - name: Checkout code
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v2
 
-      # Set up Node.js
-      - name: Install Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      # Deploy to AWS (example using AWS CLI)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          node-version: ${{ matrix.node-version }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
 
-      # Install root dependencies (for monorepo)
-      - name: Install dependencies
-        run: npm install
-        # working-directory: ./Vendors
+      # Deploy to S3 (example)
+      - name: Deploy to S3
+        run: aws s3 sync ./dist s3://your-s3-bucket-name --delete
 
-  # Add Deployment Here (Optional for prod/staging pipelines)
+      # Deploy to AWS CodeDeploy (example)
+      - name: Deploy to AWS CodeDeploy
+        run: |
+          aws deploy create-deployment \
+            --application-name your-app-name \
+            --deployment-group-name your-deployment-group \
+            --s3-location bucket=your-s3-bucket-name,key=your-app.zip,bundleType=zip
