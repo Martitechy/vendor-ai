@@ -1,13 +1,13 @@
 name: vendor-service
+description: CI/CD pipeline for vendor service
 
 on:
   push:
     branches:
-      - main
+      - dev
   # Uncomment the following lines to enable pull request testing
-  pull_request:
-    branches: [main]
-
+  # pull_request:
+  #   branches: [main]
 jobs:
   buildAndTest:
     name: CI Pipeline
@@ -17,27 +17,47 @@ jobs:
         node-version: ["12.x"]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # Checkout the repo
+      - uses: actions/checkout@v3
 
+      # Set up Node.js ||
+      # Initialize Node.js
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Install dependencies in Vendors directory
+      # Install root dependencies (for monorepo)
       - name: Install dependencies
         run: npm install
-        working-directory: Vendors
+        # working-directory: ./Vendors
+# Work on the AWS credentials and test the continuous deployment part
+      # Run tests (uncomment if you have tests)
+      # - name: Run tests
+      #   run: npm test
+  # deploy:
+  #   name: CD Pipeline
+  #   runs-on: ubuntu-latest
+  #   needs: buildAndTest
+  #   steps:
+  #     - uses: actions/checkout@v2
 
-      # Run tests for vendor service in Vendors directory
-      - name: Run Mocha tests for Vendors
-        run: npm run test:vendors
-        working-directory: Vendors
-        env:
-          NODE_ENV: test
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          PORT: 3000
+  #     # Deploy to AWS (example using AWS CLI)
+  #     - name: Configure AWS credentials
+  #       uses: aws-actions/configure-aws-credentials@v2
+  #       with:
+  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #         aws-region: us-east-1
 
-  # Add Deployment Here (Optional for prod/staging pipelines)
+  #     # Deploy to S3 (example)
+  #     - name: Deploy to S3
+  #       run: aws s3 sync ./dist s3://your-s3-bucket-name --delete
+
+  #     # Deploy to AWS CodeDeploy (example)
+  #     - name: Deploy to AWS CodeDeploy
+  #       run: |
+  #         aws deploy create-deployment \
+  #           --application-name your-app-name \
+  #           --deployment-group-name your-deployment-group \
+  #           --s3-location bucket=your-s3-bucket-name,key=your-app.zip,bundleType=zip
