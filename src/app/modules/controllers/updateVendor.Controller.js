@@ -7,10 +7,24 @@ import { logger } from "../../../../../_shared/_utils/logger.js";
 
 export const updateVendor = async (req, res, next) => {
   try {
+    // Check if user is logged in (assuming req.user is set by auth middleware)
+    if (!req.user) {
+      return res.redirect("/login");
+    }
+
     const vendorId = req.params.id;
     const updates = req.body;
 
-    const vendor = await VendorService.updateVendor({ _id: vendorId }, updates);
+    // Only allow editing name and businessName
+    const allowedUpdates = {};
+    if ("name" in updates) allowedUpdates.name = updates.name;
+    if ("businessName" in updates)
+      allowedUpdates.businessName = updates.businessName;
+
+    const vendor = await VendorService.updateVendor(
+      { _id: vendorId },
+      allowedUpdates
+    );
     if (!vendor) {
       return next(
         createError(HTTP.NOT_FOUND, [

@@ -8,6 +8,7 @@ import { loginVendor } from "../controllers/loginVendor.controller.js";
 import { registerVendor } from "../controllers/registerVendor.controller.js";
 import { updateVendor } from "../controllers/updateVendor.Controller.js";
 import { getVendorById } from "../controllers/getVendorById.controller.js";
+import { listVendors } from "../controllers/listVendors.controller.js";
 import Vendor from "../models/vendor.js";
 
 const router = express.Router();
@@ -33,6 +34,7 @@ router.get(
 // ✅ VENDOR-ONLY ROUTES
 router.get("/vendor/:id", authVendor, authorizeRole(["vendor"]), getVendorById);
 router.put("/vendor/:id", authVendor, authorizeRole(["vendor"]), updateVendor);
+router.get("/Vendor", authVendor, authorizeRole(["admin"]), listVendors);
 // ✅ HEALTH CHECK
 router.get("/health", (_, res) => res.send("Vendor service live ✅"));
 

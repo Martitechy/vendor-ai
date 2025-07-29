@@ -11,7 +11,16 @@ export const registerVendor = async (req, res, next) => {
 
     const existing = await VendorService.findVendor({ phone });
     if (existing) {
-      return next(createError.Conflict("Phone number already registered"));
+      return next(
+        createError(HTTP.BAD_REQUEST, [
+          {
+            status: RESPONSE.ERROR,
+            message: "Phone number already registered",
+            statusCode: HTTP.BAD_REQUEST,
+            code: HTTP.BAD_REQUEST,
+          },
+        ])
+      );
     }
 
     const newVendor = await VendorService.createVendor({
@@ -23,9 +32,9 @@ export const registerVendor = async (req, res, next) => {
     const token = generateVendorToken(newVendor._id); // ✅ Correct ID used
     logger.info(token, "Generated token for new vendor", newVendor._id);
 
-    return res.status(201).json({
-      code: 201,
-      status: "success",
+    return res.status(200).json({
+      code: 200,
+      status: RESPONSE.SUCCESS,
       message: "Vendor registered successfully",
       data: {
         vendor: newVendor,
