@@ -2,26 +2,33 @@ name: vendor-service
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  # Uncomment the following lines to enable pull request testing
   pull_request:
     branches: [main]
 
 jobs:
-  test:
-    name: Run Mocha Tests
+  buildAndTest:
+    name: CI Pipeline
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: ["18.x"]
+    #Initialize Node.js
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: Install Node.js${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18
-
+          node-version: ${{ matrix.node-version }}
+      # Install project dependencies, test and build
       - name: Install dependencies
         run: npm install
+        # - name: Run build
+        # - run: npm run build
 
       - name: Run Mocha tests for Vendors
         run: npm run test:vendors
