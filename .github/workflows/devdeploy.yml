@@ -1,9 +1,10 @@
 name: vendor-service
+description: CI/CD pipeline for vendor service
 
 on:
   push:
     branches:
-      - main
+      - dev
   # Uncomment the following lines to enable pull request testing
   # pull_request:
   #   branches: [main]
@@ -30,7 +31,10 @@ jobs:
       - name: Install dependencies
         run: npm install
         # working-directory: ./Vendors
-
+# Work on the AWS credentials and test the continuous deployment part
+      # Run tests (uncomment if you have tests)
+      # - name: Run tests
+      #   run: npm test
   # deploy:
   #   name: CD Pipeline
   #   runs-on: ubuntu-latest
