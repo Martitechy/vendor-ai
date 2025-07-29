@@ -14,27 +14,26 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ["18.x"]
+        node-version: ["12.x"]
 
     steps:
-      # Checkout the repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Set up Node.js
       - name: Install Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Install root dependencies (for monorepo)
+      # Install dependencies in Vendors directory
       - name: Install dependencies
         run: npm install
         working-directory: Vendors
 
-      # Run tests for vendor service
+      # Run tests for vendor service in Vendors directory
       - name: Run Mocha tests for Vendors
         run: npm run test:vendors
+        working-directory: Vendors
         env:
           NODE_ENV: test
           MONGO_URI: ${{ secrets.MONGO_URI }}
