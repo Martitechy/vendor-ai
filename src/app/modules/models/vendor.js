@@ -38,6 +38,7 @@ const schema = new mongoose.Schema(
       type: String,
       enum: ["vendor", "admin"],
       default: "vendor",
+      select: false,
     },
   },
 

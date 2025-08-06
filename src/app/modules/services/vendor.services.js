@@ -37,8 +37,21 @@ class VendorService {
     return this.VendorRepository.findOne(condition, fields);
   }
 
-  async findAllVendors(filter = {}, fields = null) {
-    return this.VendorRepository.find(filter, fields);
+  async findAllVendors(limit = 10, page = 1, filter = {}, fields = null) {
+    // Ensure fields is a string or object, else set to undefined
+    let selectFields = undefined;
+    if (fields && (typeof fields === "string" || typeof fields === "object")) {
+      selectFields = fields;
+    }
+    // Use a paginated method if available, else fallback to find
+    if (typeof this.VendorRepository.all === "function") {
+      return this.VendorRepository.all(limit, page, filter, selectFields);
+    }
+    // Fallback: manual pagination
+    const data = await this.VendorRepository.find(filter, selectFields)
+      .skip((page - 1) * limit)
+      .limit(limit);
+    return { data };
   }
 
   async findVendorById(id, fields = null) {

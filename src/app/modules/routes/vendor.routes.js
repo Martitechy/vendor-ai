@@ -8,7 +8,11 @@ import { loginVendor } from "../controllers/loginVendor.controller.js";
 import { registerVendor } from "../controllers/registerVendor.controller.js";
 import { updateVendor } from "../controllers/updateVendor.Controller.js";
 import { getVendorById } from "../controllers/getVendorById.controller.js";
+import { listVendors } from "../controllers/listVendors.controller.js";
+import { deleteOneVendor } from "../controllers/deleteOneVendor.controller.js";
 import Vendor from "../models/vendor.js";
+import { deleteManyVendor } from "../controllers/deleteManyVendors.controller.js";
+import vendor from "../models/vendor.js";
 
 const router = express.Router();
 const authVendor = createAuthMiddleware(Vendor);
@@ -26,13 +30,28 @@ router.post("/login", loginVendor); // no auth needed on login
 router.get(
   "/profile/:id",
   authVendor,
-  authorizeRole(["vendor", "admin"]),
+  authorizeRole(["admin", "vendor"]),
   getVendorProfile
 );
-
-// ✅ VENDOR-ONLY ROUTES
-router.get("/vendor/:id", authVendor, authorizeRole(["vendor"]), getVendorById);
 router.put("/vendor/:id", authVendor, authorizeRole(["vendor"]), updateVendor);
+// ✅ VENDOR-ONLY ROUTES
+router.get("/vendor/:id", authVendor, authorizeRole(["admin"]), getVendorById);
+// List or get all vendors
+router.get("/vendors", authVendor, authorizeRole(["admin"]), listVendors);
+// Delete a vendors
+router.delete(
+  "/vendor/:id",
+  authVendor,
+  authorizeRole(["admin"]),
+  deleteOneVendor
+);
+// Delete all/ many vendors
+router.delete(
+  "/vendors",
+  authVendor,
+  authorizeRole(["admin"]),
+  deleteManyVendor
+);
 // ✅ HEALTH CHECK
 router.get("/health", (_, res) => res.send("Vendor service live ✅"));
 
