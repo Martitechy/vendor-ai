@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { getPaginatedRecord } from "../../../_shared/_helpers/pagination.js";
+import { getPaginatedRecord } from "../src/_shared/_helpers/pagination.js";
 
 class Repository {
   constructor(Model) {

@@ -4,13 +4,13 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 
-import { RESPONSE } from "../_shared/_constants/response.js";
-import { HTTP } from "../_shared/_constants/http.js";
-import { createError } from "../_shared/_helpers/createError.js";
-import { config } from "../_shared/_config/dotenvconfig.js";
-import { db } from "../_shared/_config/db.js";
-import { logger } from "../_shared/_utils/logger.js";
-import { vendorRoutes } from "../Vendors/src/app/routes.entry.js";
+import { RESPONSE } from "../Vendors/src/_shared/_constants/response.js";
+import { HTTP } from "../Vendors/src/_shared/_constants/http.js";
+import { createError } from "../Vendors/src/_shared/_helpers/createError.js";
+import { config } from "../Vendors/src/_shared/_config/dotenvconfig.js";
+import { db } from "../Vendors/src/_shared/_config/db.js";
+import { logger } from "../Vendors/src/_shared/_utils/logger.js";
+import { vendorRoutes } from "../Vendors/src/routes/vendor.routes.js";
 
 // ✅ Initialize Database
 db();
@@ -46,7 +46,7 @@ app.use(function (_err, _req, _res, next) {
 
 // ✅ Mount versioned API routes
 const apiURL = `/api/vendor/${config.APP_VERSION}`;
-app.use(apiURL, vendorRoutes()); // 👈 Call the function if vendorRoutes is a function
+app.use(apiURL, vendorRoutes); // 👈 Call the function if vendorRoutes is a function
 
 // ✅ 404 handler for unmatched API routes
 app.use((req, res) => {
@@ -98,6 +98,6 @@ app.use((error, _req, res, _next) => {
 // ✅ Start Server
 app.listen(config.SERVER_PORT, () => {
   logger.info(
-    `🏩 🍀 🌿  Server Running ${config.APP_NAME} version ${config.APP_VERSION} 🔛 on port ${config.SERVER_PORT} 😇 😇 🌿🌿`
+    `🏩 🍀 🌿  Server Running ${config.APP_NAME} version ${config.APP_VERSION} 🔛 on port ${config.SERVER_PORT} running in ${config.NODE_ENV_DEV} mode😇 😇 🌿🌿`
   );
 });

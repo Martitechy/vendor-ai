@@ -1,9 +1,9 @@
-import { createError } from "../../../../../_shared/_helpers/createError.js";
-import { createResponse } from "../../../../../_shared/_helpers/createResponse.js";
-import { HTTP } from "../../../../../_shared/_constants/http.js";
-import { RESPONSE } from "../../../../../_shared/_constants/response.js";
+import { createError } from "../_shared/_helpers/createError.js";
+import { createResponse } from "../_shared/_helpers/createResponse.js";
+import { HTTP } from "../_shared/_constants/http.js";
+import { RESPONSE } from "../_shared/_constants/response.js";
+import { logger } from "../_shared/_utils/logger.js";
 import VendorService from "../services/vendor.services.js";
-import { logger } from "../../../../../_shared/_utils/logger.js";
 
 export const getVendorProfile = async (req, res, next) => {
   try {
