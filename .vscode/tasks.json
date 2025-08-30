@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Mocha tests for Vendors",
+			"type": "shell",
+			"command": "npx mocha --config mocha.config.json",
+			"args": [],
+			"isBackground": false,
+			"problemMatcher": [
+				"$mocha"
+			],
+			"group": "test"
+		}
+	]
+}

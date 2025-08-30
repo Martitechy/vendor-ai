@@ -3,22 +3,8 @@ import { createResponse } from "../../../../../_shared/_helpers/createResponse.j
 import { createError } from "../../../../../_shared/_helpers/createError.js";
 import { HTTP } from "../../../../../_shared/_constants/http.js";
 import { RESPONSE } from "../../../../../_shared/_constants/response.js";
-// Pseudocode:
-// 1. Define an async controller function to delete all vendors.
-// 2. Check if the request body contains a confirmation flag.
-//    - If not, return an error response indicating confirmation is required.
-// 3. If confirmed, use the Vendor model to delete all vendor documents from the database.
-// 4. Return a success response with the count of deleted vendors.
-// 5. Handle any errors by returning an appropriate error response.
-
-/**
- * Controller to delete all vendors from the database.
- * Requires a confirmation flag in the request body to proceed.
- * Responds with the number of deleted vendors or an error message.
- */
 
 export const deleteAllVendors = async (req, res, next) => {
-  
   try {
     if (!req.body.confirmDeleteAll) {
       return next(

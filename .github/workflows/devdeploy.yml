@@ -8,6 +8,10 @@ on:
   # Uncomment the following lines to enable pull request testing
   # pull_request:
   #   branches: [main]
+
+  # Pseudocode:
+  # When a push is made to the 'dev' branch, run the CI pipeline.
+  # Before running build and test, display who made the update, the time, and the commit message.
 jobs:
   buildAndTest:
     name: CI Pipeline
@@ -20,6 +24,15 @@ jobs:
       # Checkout the repo
       - uses: actions/checkout@v3
 
+      # Show commit details (author, time, message)
+      - name: Show commit info
+        run: |
+          echo "Commit Author: $(git log -1 --pretty=format:'%an <%ae>')"
+          echo "Commit Date: $(git log -1 --date=iso --pretty=format:'%ad')"
+          echo "Commit Message: $(git log -1 --pretty=format:'%s')"
+        shell: bash
+        # This step prints out who made the last commit, when, and the commit message
+
       # Set up Node.js ||
       # Initialize Node.js
       - name: Install Node.js ${{ matrix.node-version }}
@@ -31,33 +44,46 @@ jobs:
       - name: Install dependencies
         run: npm install
         # working-directory: ./Vendors
-# Work on the AWS credentials and test the continuous deployment part
-      # Run tests (uncomment if you have tests)
-      # - name: Run tests
-      #   run: npm test
-  # deploy:
-  #   name: CD Pipeline
-  #   runs-on: ubuntu-latest
-  #   needs: buildAndTest
-  #   steps:
-  #     - uses: actions/checkout@v2
 
-  #     # Deploy to AWS (example using AWS CLI)
-  #     - name: Configure AWS credentials
-  #       uses: aws-actions/configure-aws-credentials@v2
-  #       with:
-  #         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  #         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         aws-region: us-east-1
+      # Run tests
+      - name: Run tests
+        run: npm test
+        # This step runs your test suite. Make sure you have tests defined in package.json.
 
-  #     # Deploy to S3 (example)
-  #     - name: Deploy to S3
-  #       run: aws s3 sync ./dist s3://your-s3-bucket-name --delete
+      # Lint code
+      - name: Lint code
+        run: npm run lint || echo "Linting failed, but continuing..."
+        # This step checks code quality. Adjust the command if you use a different linter.
 
-  #     # Deploy to AWS CodeDeploy (example)
-  #     - name: Deploy to AWS CodeDeploy
-  #       run: |
-  #         aws deploy create-deployment \
-  #           --application-name your-app-name \
-  #           --deployment-group-name your-deployment-group \
-  #           --s3-location bucket=your-s3-bucket-name,key=your-app.zip,bundleType=zip
+      # Build project (if applicable)
+      - name: Build project
+        run: npm run build || echo "Build failed, but continuing..."
+        # This step builds your project. Remove '|| echo ...' if you want to fail on build errors.
+
+      # ...existing code...
+# deploy:
+#   name: CD Pipeline
+#   runs-on: ubuntu-latest
+#   needs: buildAndTest
+#   steps:
+#     - uses: actions/checkout@v2
+
+#     # Deploy to AWS (example using AWS CLI)
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v2
+#       with:
+#         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#         aws-region: us-east-1
+
+#     # Deploy to S3 (example)
+#     - name: Deploy to S3
+#       run: aws s3 sync ./dist s3://your-s3-bucket-name --delete
+
+#     # Deploy to AWS CodeDeploy (example)
+#     - name: Deploy to AWS CodeDeploy
+#       run: |
+#         aws deploy create-deployment \
+#           --application-name your-app-name \
+#           --deployment-group-name your-deployment-group \
+#           --s3-location bucket=your-s3-bucket-name,key=your-app.zip,bundleType=zip
