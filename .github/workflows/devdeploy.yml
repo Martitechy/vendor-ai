@@ -1,6 +1,4 @@
 name: vendor-service
-description: CI/CD pipeline for vendor service
-
 on:
   push:
     branches:
