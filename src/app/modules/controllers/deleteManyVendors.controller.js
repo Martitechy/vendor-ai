@@ -4,6 +4,7 @@ import { createError } from "../../../../../_shared/_helpers/createError.js";
 import { HTTP } from "../../../../../_shared/_constants/http.js";
 import { RESPONSE } from "../../../../../_shared/_constants/response.js";
 
+
 export const deleteAllVendors = async (req, res, next) => {
   try {
     if (!req.body.confirmDeleteAll) {

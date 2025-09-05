@@ -103,4 +103,6 @@ describe("deleteManyVendor controller", () => {
     ).to.be.true;
     expect(next.notCalled).to.be.true;
   });
+
+
 });
