@@ -10,7 +10,7 @@ export const deleteAllVendors = async (req, res, next) => {
     if (!req.body.confirmDeleteAll) {
       return next(
         createError(HTTP.BAD_REQUEST, [
-          {
+          { 
             status: RESPONSE.ERROR,
             message: "Confirmation required to delete all vendors",
             statusCode: HTTP.BAD_REQUEST,

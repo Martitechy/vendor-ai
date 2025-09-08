@@ -5,6 +5,14 @@ import { RESPONSE } from "../../../../../_shared/_constants/response.js";
 import VendorService from "../services/vendor.services.js";
 import { logger } from "../../../../../_shared/_utils/logger.js";
 
+// Controller to hard delete a vendor by ID
+// Expects the vendor ID to be provided in req.params.id
+// Returns a success message if deletion is successful
+// Returns a 404 error if the vendor does not exist
+// Catches and logs any unexpected errors, returning a 500 error response in such cases
+// Usage example: DELETE /vendors/:id
+// where :id is the ID of the vendor to be deleted
+// Requires authentication and appropriate permissions to delete a vendor
 export const deleteOneVendor = async (req, res, next) => {
   try {
     const { id } = req.params;
