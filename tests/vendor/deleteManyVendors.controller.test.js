@@ -105,6 +105,4 @@ describe("deleteManyVendor controller", () => {
   });
 
 
-
-
 });
